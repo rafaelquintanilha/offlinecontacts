@@ -1,0 +1,73 @@
+<head>
+  <title>Offline App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+</head>
+
+<template name="layout">
+  {{#ionBody}}
+      {{> ionNavBar class="bar-positive"}}
+      {{#ionNavView}}
+          {{> yield}}
+      {{/ionNavView}}
+    {{/ionBody}}
+</template>
+
+<template name="new">
+  <div class="bar bar-header bar-positive">
+    {{>ionNavBackButton path="contacts" text="Back"}}
+    <div class="title">Edit Contact</div>
+  </div>
+
+  {{#ionView}}
+      {{#ionContent class="padding"}}
+          {{> quickForm schema="ContactsSchema" collection="Contacts" id="insertContactForm" type="normal" omitFields="createdAt, lastUpdated"}}
+      {{/ionContent}}
+  {{/ionView}}
+</template>
+
+<template name="edit">
+    <div class="bar bar-header bar-positive">
+      {{>ionNavBackButton path="contacts" text="Back"}}
+      <div class="title">Edit Contact</div>
+    </div>
+
+  {{#ionView}}
+      {{#ionContent class="padding"}}
+        {{#if Template.subscriptionsReady}}
+          {{> quickForm schema="ContactsSchema" collection="Contacts" id="editContactForm" type="normal" doc=selectedDoc omitFields="createdAt, lastUpdated"}}
+        {{else}}
+          {{> spinner}}
+        {{/if}}
+      {{/ionContent}}
+  {{/ionView}}
+</template>
+
+<template name="contacts">
+  {{#contentFor "headerTitle"}}
+    <h1 class="title">Contacts</h1>
+  {{/contentFor}}
+
+  {{#contentFor "headerButtonRight"}}
+    <a href="{{pathFor 'new'}}" class="button button-clear">{{> ionIcon icon="ios-plus-empty"}}</a>
+  {{/contentFor}}
+
+  {{#ionView}}
+      {{#ionContent}}
+          {{#if Template.subscriptionsReady}}
+            {{#ionList}}
+             {{#each contacts}}
+               {{#ionItem path="edit" buttonRight=true}}
+                  <h2>{{name}}</h2>
+                  <p>{{email}}</p>
+                  <button class="button button-assertive">
+                    {{> ionIcon icon="close-circled"}}
+                  </button>
+               {{/ionItem}}
+             {{/each}}
+            {{/ionList}}
+         {{else}}
+          {{> spinner}}
+         {{/if}}
+      {{/ionContent}}
+  {{/ionView}}
+</template>
