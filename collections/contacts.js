@@ -19,7 +19,7 @@ ContactsSchema = new SimpleSchema({
 
 Contacts = new Meteor.Collection('Contacts');
 
-if (Meteor.isCordova) Ground.Collection(Contacts);
+if (Meteor.isClient) Ground.Collection(Contacts);
 
 Meteor.methods({
   addContact: function(doc) {
